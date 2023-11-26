@@ -1,10 +1,10 @@
-package com.zpx.alpha;
+package com.zpx.onetoone;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AlphaApplicationTests {
+class OneToOneApplicationTests {
 
     @Test
     void contextLoads() {
