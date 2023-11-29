@@ -22,5 +22,5 @@ public class Postagem {
 
     @OneToMany
     @JoinColumn(name = "codigo_postagem",referencedColumnName = "codigo")
-    private List<Comentatio> comentatios; // criado no One mais essa coluna vai aparecer na tabela no db do many
+    private List<Comentario> comentarios; // criado no One mais essa coluna vai aparecer na tabela no db do many
 }

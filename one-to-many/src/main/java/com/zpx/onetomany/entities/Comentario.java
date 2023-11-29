@@ -8,7 +8,7 @@ import lombok.Setter;
 @Table(name = "comentarios")
 @Getter
 @Setter
-public class Comentatio {
+public class Comentario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codigo;
