@@ -23,4 +23,11 @@ public class PostagemController {
     public Postagem createPostagem (@RequestBody Postagem obj) {
         return postagemRepository.save(obj);
     }
+
+    @PutMapping("/{id}")
+    public Postagem updatePostagem (@RequestBody Postagem obj,@PathVariable Long id){
+        obj.setCodigo(id);
+        Postagem newObj = postagemRepository.save(obj);
+        return newObj;
+    }
 }
