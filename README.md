@@ -1,70 +1,129 @@
-### Principais anotações de relacionamento disponíveis no Spring Boot:
+---
+### 1. **@OneToOne: Um para Um**
 
-1. **@OneToOne:**
-   - Anotação usada para mapear um relacionamento um-para-um entre duas entidades. Por exemplo, um usuário pode ter um único perfil, e um perfil pode estar associado a apenas um usuário.
+No relacionamento `@OneToOne`, uma entidade está associada a exatamente uma instância da outra entidade. Vamos considerar o exemplo de um autor e sua biografia.
 
-   ```java
-   @Entity
-   public class Usuario {
-       // ...
-       @OneToOne
-       @JoinColumn(name = "perfil_id")
-       private Perfil perfil;
-   }
-   ```
+**Author Entity:**
+```java
+@Entity
+public class Author {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-2. **@OneToMany:**
-   - Anotação usada para mapear um relacionamento um-para-muitos. Por exemplo, um autor pode ter vários livros, mas um livro pertence a apenas um autor.
+    private String name;
 
-   ```java
-   @Entity
-   public class Autor {
-       // ...
-       @OneToMany(mappedBy = "autor")
-       private List<Livro> livros;
-   }
-   ```
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "biography_id", referencedColumnName = "id")
+    private Biography biography;
 
-3. **@ManyToOne:**
-   - Anotação usada para mapear um relacionamento muitos-para-um. Por exemplo, muitos produtos podem pertencer a uma única categoria.
+    // Construtores, getters e setters
+}
+```
 
-   ```java
-   @Entity
-   public class Produto {
-       // ...
-       @ManyToOne
-       @JoinColumn(name = "categoria_id")
-       private Categoria categoria;
-   }
-   ```
+**Biography Entity:**
+```java
+@Entity
+public class Biography {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-4. **@ManyToMany:**
-   - Anotação usada para mapear um relacionamento muitos-para-muitos entre duas entidades. Por exemplo, um estudante pode estar matriculado em vários cursos, e um curso pode ter vários estudantes.
+    private String content;
 
-   ```java
-   @Entity
-   public class Estudante {
-       // ...
-       @ManyToMany
-       @JoinTable(
-           name = "matriculas",
-           joinColumns = @JoinColumn(name = "estudante_id"),
-           inverseJoinColumns = @JoinColumn(name = "curso_id")
-       )
-       private List<Curso> cursos;
-   }
-   ```
+    // Construtores, getters e setters
+}
+```
 
-5. **@JoinColumn:**
-   - Usada para especificar a coluna de junção para a associação. Pode ser usada em conjunto com `@OneToOne`, `@OneToMany`, e `@ManyToOne`.
+Neste exemplo, cada autor tem uma única biografia.
 
-   ```java
-   @Entity
-   public class Pedido {
-       // ...
-       @ManyToOne
-       @JoinColumn(name = "cliente_id")
-       private Cliente cliente;
-   }
-   ```
+---
+### 2. **@OneToMany: Um para Muitos**
 
+No relacionamento `@OneToMany`, uma entidade está associada a várias instâncias da outra entidade. Vamos considerar o exemplo de um autor e seus livros.
+
+**Author Entity:**
+```java
+@Entity
+public class Author {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    private List<Book> books;
+
+    // Construtores, getters e setters
+}
+```
+
+**Book Entity:**
+```java
+@Entity
+public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String title;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Author author;
+
+    // Construtores, getters e setters
+}
+```
+
+Neste exemplo, um autor pode ter vários livros.
+
+---
+### 3. **@ManyToMany: Muitos para Muitos**
+
+No relacionamento `@ManyToMany`, várias instâncias de uma entidade podem estar associadas a várias instâncias da outra entidade. Vamos considerar o exemplo de autores e seus gêneros literários.
+
+**Author Entity:**
+```java
+@Entity
+public class Author {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @ManyToMany
+    @JoinTable(
+      name = "author_genre",
+      joinColumns = @JoinColumn(name = "author_id"),
+      inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    private List<Genre> genres;
+
+    // Construtores, getters e setters
+}
+```
+
+**Genre Entity:**
+```java
+@Entity
+public class Genre {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    // Construtores, getters e setters
+}
+```
+
+Neste exemplo, um autor pode estar associado a vários gêneros literários, e um gênero literário pode estar associado a vários autores.
+
+### Notas Gerais:
+
+- `@ManyToOne` e `@OneToMany` são usados juntos para representar o relacionamento bidirecional.
+- `cascade = CascadeType.ALL` permite que as operações de persistência (como salvar e excluir) sejam propagadas para a entidade associada.
+- `mappedBy` é usado para indicar o campo correspondente na outra entidade.
+---
