@@ -187,3 +187,22 @@ CREATE TABLE student_course (
 ```
 
 Este exemplo representa um relacionamento muitos-para-muitos entre estudantes e cursos, permitindo que um estudante esteja matriculado em vários cursos e um curso tenha vários estudantes.
+
+### MappedBy 
+
+No exemplo:
+
+```java
+@ManyToMany(mappedBy = "courses")
+private List<Student> students;
+```
+
+- O `mappedBy` está indicando que o relacionamento muitos-para-muitos entre `Course` e `Student` é gerenciado pelo atributo `courses` na classe `Student`.
+
+Então, para esclarecer ainda mais:
+
+- Na classe `Student`, o atributo `courses` está mapeando o relacionamento.
+
+- Na classe `Course`, o `mappedBy` aponta para o atributo `courses` na classe `Student`, indicando que o mapeamento real está sendo feito lá.
+
+Basicamente, `mappedBy` diz "o mapeamento deste relacionamento está sendo feito pela outra classe, usando esse atributo específico". No exemplo, o mapeamento está sendo feito através do atributo `courses` na classe `Student`.
